@@ -1,14 +1,61 @@
 import styles from './App.module.css'
 import Logo from './assets/logo.svg'
 import { PlusCircle } from '@phosphor-icons/react'
-import { useState } from 'react';
-import { TaskProps } from './components/Task';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { Task, TaskProps } from './components/Task';
 import { Clipboard } from './assets/Clipboard';
 
 export function App() {
-  const [tasks, setTasks] = useState<TaskProps[]>([])
-  const [totalTasks, setTotalTasks] = useState(0)
+  const [tasks, setTasks] = useState<TaskProps[]>([{
+    id: 1,
+    title: 'Estudar React',
+    isCompleted: false
+  }, {
+    id: 2,
+    title: 'Integer urna interdum massa libero auctor neque turpis turpis semper. Duis vel sed fames integer.',
+    isCompleted: false
+  }, {
+    id: 3,
+    title: 'Estudar Node.js',
+    isCompleted: true
+  }])
+  const [totalTasks, setTotalTasks] = useState(tasks.length)
   const [completedTasks, setCompletedTasks] = useState(0)
+  const [newTaskTitle, setNewTaskTitle] = useState('')
+
+  function handleNewTaskTitleChange(event: ChangeEvent<HTMLInputElement>) {
+    setNewTaskTitle(event.target.value);
+  }
+
+  function handleAddNewTask(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    if (!newTaskTitle) {
+      return;
+    }
+
+    const highestId = tasks.reduce((acc: TaskProps, task: TaskProps) => {
+      return task.id > acc.id ? task : acc
+    })
+    
+    const newTask: TaskProps = {
+      id: highestId.id + 1,
+      title: newTaskTitle,
+      isCompleted: false
+    }
+    
+    setTasks(prevState => [...prevState, newTask])
+    setTotalTasks(prevState => prevState + 1)
+
+  }
+
+  function handleCheckTask(id: number) {
+    console.log(id);
+  }
+
+  function handleDeleteTask(id: number) {
+    console.log(id);
+  }
 
   return (
     <div>
@@ -17,11 +64,13 @@ export function App() {
       </header>
 
       <main className={styles.main}>
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={handleAddNewTask}>
           <input
             className={styles.input}
             type="text"
             placeholder='Adicione uma nova tarefa'
+            onChange={handleNewTaskTitleChange}
+            value={newTaskTitle}
           />
 
           <button
@@ -41,13 +90,24 @@ export function App() {
 
             <div>
               <p>Concluídas</p>
-              <span>{completedTasks}</span>
+              <span>{totalTasks > 0 ? `${completedTasks} de ${totalTasks}` : 0}</span>
             </div>
           </header>
 
           {
-            tasks.length > 0 ? (
-              <h1>task</h1>
+            totalTasks > 0 ? (
+              <div className={styles.tasks}>
+                {tasks.map(task => (
+                  <Task
+                    key={task.id}
+                    id={task.id}
+                    title={task.title}
+                    isCompleted={task.isCompleted}
+                    onCheck={handleCheckTask}
+                    onDelete={handleDeleteTask}
+                  />
+                ))}
+              </div>
             ) : (
               <div className={styles.emptyList}>
                 <Clipboard />
@@ -61,3 +121,5 @@ export function App() {
     </div>
   )
 }
+
+

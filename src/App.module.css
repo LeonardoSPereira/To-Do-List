@@ -119,3 +119,15 @@
   gap: 0.8rem;
   padding-bottom: 2rem;
 }
+
+@media(max-width: 768px) {
+  .main {
+    padding: 0 2rem;
+  }
+
+  .taskList > header {
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: flex-start;
+  }
+}

@@ -1,7 +1,7 @@
 import styles from './App.module.css'
 import Logo from './assets/logo.svg'
 import { PlusCircle } from '@phosphor-icons/react'
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Task, TaskProps } from './components/Task';
 import { Clipboard } from './assets/Clipboard';
 
@@ -34,10 +34,16 @@ export function App() {
       return;
     }
 
-    const highestId = tasks.reduce((acc: TaskProps, task: TaskProps) => {
-      return task.id > acc.id ? task : acc
-    })
-    
+    let highestId;
+
+    if(tasks.length !== 0) {
+      highestId = tasks.reduce((acc: TaskProps, task: TaskProps) => {
+        return task.id > acc.id ? task : acc
+      })
+    } else {
+      highestId = { id: 0 };
+    }
+
     const newTask: TaskProps = {
       id: highestId.id + 1,
       title: newTaskTitle,
@@ -46,16 +52,38 @@ export function App() {
     
     setTasks(prevState => [...prevState, newTask])
     setTotalTasks(prevState => prevState + 1)
+    setNewTaskTitle('')
 
+  }
+
+  function countCompletedTasks() {
+    const completedTasks = tasks.filter(task => task.isCompleted);
+
+    setCompletedTasks(completedTasks.length);
   }
 
   function handleCheckTask(id: number) {
-    console.log(id);
+    const updatedTasks = tasks.map(task => {
+      if (task.id === id) {
+        task.isCompleted = !task.isCompleted;
+      }
+
+      return task;
+    });
+
+    setTasks(updatedTasks);
   }
 
   function handleDeleteTask(id: number) {
-    console.log(id);
+    const filteredTasks = tasks.filter(task => task.id !== id);
+
+    setTasks(filteredTasks);
+    setTotalTasks(prevState => prevState - 1);
   }
+
+  useEffect(() => {
+    countCompletedTasks();
+  }, [tasks])
 
   return (
     <div>

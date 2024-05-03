@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@phosphor-icons/react':
     specifier: ^2.0.15
-    version: 2.0.15(react-dom@18.3.1)(react@18.3.1)
+    version: 2.1.5(react-dom@18.3.1)(react@18.3.1)
   '@types/aria-query':
     specifier: ^5.0.4
     version: 5.0.4
@@ -583,8 +583,8 @@ packages:
       fastq: 1.17.1
     dev: true
 
-  /@phosphor-icons/react@2.0.15(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-PQKNcRrfERlC8gJGNz0su0i9xVmeubXSNxucPcbCLDd9u0cwJVTEyYK87muul/svf0UXFdL2Vl6bbeOhT1Mwow==}
+  /@phosphor-icons/react@2.1.5(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-B7vRm/w+P/+eavWZP5CB5Ul0ffK4Y7fpd/auWKuGvm+8pVgAJzbOK8O0s+DqzR+TwWkh5pHtJTuoAtaSvgCPzg==}
     engines: {node: '>=10'}
     peerDependencies:
       react: '>= 16.8'
